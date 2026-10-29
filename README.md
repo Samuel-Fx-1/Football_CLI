@@ -8,6 +8,45 @@ Python web-scraper that automatically retrieves the latest stats for major Footb
  >**Stats:** Top Scorers (All leagues & competitions) <br/>
  >**Video:** Live streams & Full game highlights
 
+##Next.js Web Edition
+The original Python CLI now has a **1:1 Next.js rebuild** — same menus, same table formatting, same features, running in the browser as a terminal-style app. `Football_CLI.py` is left completely untouched.
+
+###Run it
+```bash
+npm install
+cp .env.example .env.local
+npm run dev
+# open http://localhost:3000
+```
+
+###Build & deploy
+```bash
+npm run build
+npm start
+```
+The app is Vercel-ready: import the repository, keep the default Next.js settings and deploy.
+
+###How the web edition works
+* Server route handlers port the original `requests` + BeautifulSoup scrapers to `fetch` + Cheerio, using the **same CSS selectors** as `Football_CLI.py`.
+* Soccerway retired the legacy 2016/17 table markup, so the app reads the exact archived pages from the Wayback Machine. This keeps the original 2016/17 dataset working. Set `SOCCERWAY_LIVE=1` to point at the live site instead.
+* Live Streams and Highlights use Reddit's OAuth API. Add `REDDIT_CLIENT_ID` and `REDDIT_CLIENT_SECRET` to `.env.local` (see `.env.example`); without credentials those two screens return a setup hint.
+* Responses are cached in-process for an hour, so repeat navigation does not hammer the archive. Champions League group tables are read from a single final group-stage snapshot so all eight groups show the same matchday.
+* Cold Wayback fetches can be slow, especially “Results by Group”, which loads every fixture and match-detail page; the terminal waits up to five minutes for that request.
+* The menu supports typing `1`–`7`, clickable command-deck shortcuts, command history (`↑`/`↓`) and `Ctrl+L` to clear the screen.
+
+###API routes
+| Route | Purpose |
+| --- | --- |
+| `/api/standings?league=epl` | League table (`epl`, `liga`, `serieA`, `ligue1`, `bundesliga`) |
+| `/api/matches?league=epl` | Fixtures + match events |
+| `/api/topscorers?league=epl` | Top scorers |
+| `/api/champions/standings` | Champions League groups A–H |
+| `/api/matches?competition=ucl` | Champions League results |
+| `/api/matches?competition=ucl&byGroup=1` | Results group by group |
+| `/api/topscorers?competition=ucl` | Champions League top scorers |
+| `/api/streams` / `/api/streams?q=barcelona` | Reddit live streams |
+| `/api/highlights` / `/api/highlights?q=arsenal` | Reddit highlights |
+
 ##Who Is It For?
 **Anyone who wants to find Football information quickly, without a hassle and most importantly without ADs!**:thumbsup: <br/> I always like to stay up to date with game scores, details and watching highlights but I hate having to search through a lot of different websites to find what I need.
 

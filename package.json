@@ -1,0 +1,17 @@
+{
+  "name": "football-cli-web",
+  "version": "1.1.4",
+  "private": true,
+  "description": "Next.js edition of Football-CLI — live football stats, match scores, streams and highlights in a terminal-style web UI.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "next": "^16.4.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}
